@@ -1,0 +1,43 @@
+h1 {
+  font-size: 3.5rem;
+  text-transform: capitalize;
+  font-weight: 700;
+  span {
+    $barSize: 0.18em;
+    padding-left: 0.15em;
+    display: inline-block;
+    background: linear-gradient(to bottom right, red, purple);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: padding 0.15s ease-in;
+    &:hover {
+      padding-left: calc($barSize * 2);
+      &::before {
+        width: $barSize;
+      }
+    }
+    position: relative;
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 0;
+      height: 100%;
+      background: linear-gradient(to bottom right, red, purple);
+      position: absolute;
+      left: 0;
+      transition: width 0.15s linear 0.1s;
+    }
+  }
+}
+app-loading {
+  margin: auto;
+  display: block;
+  width: fit-content;
+}
+app-card {
+  margin-block: 1em;
+  display: block;
+}
