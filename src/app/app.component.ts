@@ -6,11 +6,18 @@ import { CardComponent } from './components/card/card.component';
 import { DummyTextService } from './services/dummy-text.service';
 import { LoadingComponent } from './components/loading/loading.component';
 import { IParagraph } from './interfaces/text.interface';
+import { ScrollNearEndDirective } from './directives/scroll-near-end.directive';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, CardComponent, LoadingComponent],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    CardComponent,
+    LoadingComponent,
+    ScrollNearEndDirective
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   providers: [DummyTextService]
@@ -24,4 +31,9 @@ export class AppComponent implements OnInit {
   constructor(private textService: DummyTextService) {}
 
   ngOnInit() {}
+
+  
+  chargeNextParagraphs() {
+    console.log("++ near end");
+  }
 }
