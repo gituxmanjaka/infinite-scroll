@@ -11,10 +11,10 @@ export class DummyTextService {
 
   constructor(private http: HttpClient) {}
 
-  getParagraphs(paragraphSize?: number) {
+  getParagraphs(page: number = 1, itemPerPage: number = 10) {
     return this.http.get(this.loremUrl, {responseType: 'text'}).pipe(
       map(text => this.splitToArray(text)),
-      map(paragraphs => paragraphSize ? paragraphs.slice(0, paragraphSize) : paragraphs),
+      map(paragraphs => this.sliceToGivenPage(paragraphs, page, itemPerPage)),
       map(arrayText => this.buildParagraphs(arrayText))
     )
   }
@@ -33,4 +33,12 @@ export class DummyTextService {
       } as IParagraph
     })
   }
+  
+  private sliceToGivenPage(list: string[], page: number, itemPerPage: number) {
+    const start = (page - 1) * itemPerPage;
+    const end = start + itemPerPage;
+    return list.slice(start, end)
+  }
+
 }
+

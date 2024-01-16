@@ -15,7 +15,7 @@ import { LoadingComponent } from './loading/loading.component';
 })
 export class AppComponent implements OnInit {
 
-  paragraphs$ = this.textService.getParagraphs(5);
+  paragraphs$ = this.textService.getParagraphs(2, 8);
 
   constructor(private textService: DummyTextService) {}
 
