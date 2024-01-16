@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
-import { IParagraph } from './text.interface';
+import { IParagraph } from '../interfaces/text.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +14,8 @@ export class DummyTextService {
   getParagraphs(page: number = 1, itemPerPage: number = 10) {
     return this.http.get(this.loremUrl, {responseType: 'text'}).pipe(
       map(text => this.splitToArray(text)),
-      map(paragraphs => this.sliceToGivenPage(paragraphs, page, itemPerPage)),
-      map(arrayText => this.buildParagraphs(arrayText))
+      map(arrayText => this.buildParagraphs(arrayText)),
+      map(paragraphs => this.paginateParagraphs(paragraphs, page, itemPerPage))
     )
   }
 
@@ -34,7 +34,7 @@ export class DummyTextService {
     })
   }
   
-  private sliceToGivenPage(list: string[], page: number, itemPerPage: number) {
+  private paginateParagraphs(list: any[], page: number, itemPerPage: number) {
     const start = (page - 1) * itemPerPage;
     const end = start + itemPerPage;
     return list.slice(start, end)

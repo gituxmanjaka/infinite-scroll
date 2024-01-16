@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IParagraph } from '../text.interface';
+import { IParagraph } from '../../interfaces/text.interface';
 
 @Component({
   selector: 'app-card',

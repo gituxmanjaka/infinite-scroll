@@ -1,7 +1,7 @@
 <div class="container">
   <h1>infinite scroll with <span>angular</span></h1>
-  @if (paragraphs$ | async; as paragraphs) {
-    @for(text of paragraphs; track text.id) {
+  @if (paragraphs()) {
+    @for(text of paragraphs(); track text.id) {
       <app-card [paragraph]="text"></app-card>
     }
   } @else {
