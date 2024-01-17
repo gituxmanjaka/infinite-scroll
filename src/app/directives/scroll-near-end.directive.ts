@@ -1,4 +1,4 @@
-import { AfterViewChecked, Directive, ElementRef, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewChecked, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { BehaviorSubject, Subscription, distinctUntilChanged, filter } from 'rxjs';
 
 @Directive({
@@ -6,6 +6,7 @@ import { BehaviorSubject, Subscription, distinctUntilChanged, filter } from 'rxj
   standalone: true
 })
 export class ScrollNearEndDirective implements AfterViewChecked, OnDestroy, OnInit {
+  @Input() detectSameChildren = true;
   @Output() nearEnd: EventEmitter<void> = new EventEmitter();
 
   lastChildElement$ = new BehaviorSubject<HTMLElement | null>(null);
@@ -15,8 +16,14 @@ export class ScrollNearEndDirective implements AfterViewChecked, OnDestroy, OnIn
   ngAfterViewChecked(): void {
     const childElements = this.elementRef.nativeElement.children;
     const theLastElement = childElements.item(childElements.length - 1) as HTMLElement;
+    
     if (theLastElement) {
-      this.lastChildElement$.next(theLastElement);
+      const sameChildElements = Array.from(childElements).filter(element => element.nodeName === theLastElement.nodeName);
+      if (this.detectSameChildren && sameChildElements.length > (childElements.length / 2)) {
+        this.lastChildElement$.next(theLastElement);
+      } else if (!this.detectSameChildren) {
+        this.lastChildElement$.next(theLastElement);
+      }
     }
   }
   

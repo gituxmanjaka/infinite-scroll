@@ -1,11 +1,13 @@
 <div class="container" appScrollNearEnd (nearEnd)="chargeNextParagraphs()">
   <h1>infinite scroll with <span>angular</span></h1>
   @if (paragraphs$ | async; as paragraphs) {
-    @for(text of paragraphs; track text.id) {
-      <app-card [paragraph]="text"></app-card>
+    @if (paragraphs.length > 0) {
+      @for(text of paragraphs; track text.id) {
+        <app-card [paragraph]="text"></app-card>
+      }
+    } @else {
+      <app-loading></app-loading>
     }
-  } @else {
-    <app-loading></app-loading>
   }
   
 </div>
