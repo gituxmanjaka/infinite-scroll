@@ -1,12 +1,12 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { CardComponent } from './components/card/card.component';
 import { DummyTextService } from './services/dummy-text.service';
 import { LoadingComponent } from './components/loading/loading.component';
-import { IParagraph } from './interfaces/text.interface';
 import { ScrollNearEndDirective } from './directives/scroll-near-end.directive';
+import { BehaviorSubject, Subscription, switchMap } from 'rxjs';
+import { IParagraph } from './interfaces/text.interface';
 
 @Component({
   selector: 'app-root',
@@ -22,18 +22,31 @@ import { ScrollNearEndDirective } from './directives/scroll-near-end.directive';
   styleUrl: './app.component.scss',
   providers: [DummyTextService]
 })
-export class AppComponent implements OnInit {
-  currentPage = 1;
+export class AppComponent implements OnInit, OnDestroy {
   itemPerPage = 10;
-
-  paragraphs = toSignal<IParagraph[]>(this.textService.getParagraphs(this.currentPage, this.itemPerPage));
+  currentPage$ = new BehaviorSubject(1);
+  paragraphs$ = new BehaviorSubject<IParagraph[]>([]);
+  currentPageSub?: Subscription;
 
   constructor(private textService: DummyTextService) {}
 
-  ngOnInit() {}
+  ngOnDestroy(): void {
+    this.currentPageSub?.unsubscribe();
+  }
 
-  
+  ngOnInit() {
+    this.currentPageSub = this.currentPage$.pipe(
+      switchMap(currentPage => this.textService.getParagraphs(currentPage, this.itemPerPage))
+    ).subscribe({
+      next: paragraphs => {
+        const currPs = this.paragraphs$.getValue();
+        this.paragraphs$.next([...currPs, ...paragraphs]);
+      }
+    })
+  }
+
   chargeNextParagraphs() {
     console.log("++ near end");
+    this.currentPage$.next(this.currentPage$.getValue() + 1);
   }
 }

@@ -34,7 +34,7 @@ export class DummyTextService {
     })
   }
   
-  private paginateParagraphs(list: any[], page: number, itemPerPage: number) {
+  private paginateParagraphs<T>(list: T[], page: number, itemPerPage: number) {
     const start = (page - 1) * itemPerPage;
     const end = start + itemPerPage;
     return list.slice(start, end)
