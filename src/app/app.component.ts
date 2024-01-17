@@ -46,7 +46,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   chargeNextParagraphs() {
-    console.log("++ near end");
     this.currentPage$.next(this.currentPage$.getValue() + 1);
   }
 }
